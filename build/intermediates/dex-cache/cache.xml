@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        jar="C:\Users\Mohamed\.gradle\caches\modules-2\files-2.1\com.google.code.gson\gson\2.3.1\ecb6e1f8e4b0e84c4b886c2f14a1500caf309757\gson-2.3.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="ecb6e1f8e4b0e84c4b886c2f14a1500caf309757">
+        <dex dex="C:\Workplace\AndroidKeyLogger-master4\app\build\intermediates\pre-dexed\debug\gson-2.3.1-24cc472a8fa3bfa610a8bedcb5de42e8fdf40f2d.jar" />
+    </item>
+    <item
+        jar="C:\Users\Mohamed\.gradle\caches\modules-2\files-2.1\com.squareup.retrofit\retrofit\1.9.0\a681c044244d9fc375198588297a39ba78028423\retrofit-1.9.0.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="a681c044244d9fc375198588297a39ba78028423">
+        <dex dex="C:\Workplace\AndroidKeyLogger-master4\app\build\intermediates\pre-dexed\debug\retrofit-1.9.0-db1774e920660734949cd03e03f0d367117bf36e.jar" />
+    </item>
+
+</items>
